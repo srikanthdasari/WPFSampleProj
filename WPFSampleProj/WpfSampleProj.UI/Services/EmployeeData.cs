@@ -57,10 +57,16 @@ namespace WpfSampleProj.UI.Services
 
         public void Add(EmployeeHours empHours, Employee emp)
         {
-            _context.EmployeeHoursList.Add(empHours);
-            //_context.Employees.Attach(emp);  
-            //_context.Entry(emp).State = EntityState.Unchanged;
-            _context.SaveChanges();
+            var empobj = _context.Employees.FirstOrDefault(x => x.EmployeeNumber == emp.EmployeeNumber);
+            if (empobj != null)
+            {
+                empobj.EmployeeHours.Add(new EmployeeHours{
+                    Description=empHours.Description,
+                    HoursWorked=empHours.HoursWorked,
+                    WorkDate=empHours.WorkDate
+                });
+                _context.SaveChanges();
+            }            
         }
 
         private EmployeeContext _context;
